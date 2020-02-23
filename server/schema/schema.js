@@ -10,9 +10,9 @@ const {
 
 // dummy data
 const books = [
-    { id: '1', name: 'Name of the Wind', genre: 'Fantasy' },
-    { id: '2', name: 'The Final Empire', genre: 'Fantasy' },
-    { id: '3', name: 'The Long Earth', genre: 'Sci-Fi' }
+    { id: '1', name: 'Name of the Wind', genre: 'Fantasy', authorId: '1' },
+    { id: '2', name: 'The Final Empire', genre: 'Fantasy', authorId: '2' },
+    { id: '3', name: 'The Long Earth', genre: 'Sci-Fi', authorId: '3' }
 ];
 
 const authors = [
@@ -26,7 +26,17 @@ const BookType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
-        genre: { type: GraphQLString}
+        genre: { type: GraphQLString},
+        author: {
+            type: AuthorType,
+            resolve(parent, args) {
+                for (author of authors) {
+                    if (authorId === author.id) {
+                        return author;
+                    }
+                }
+            }
+        }
     })
 });
 
@@ -46,7 +56,6 @@ const RootQuery = new GraphQLObjectType({
             type: BookType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-                // code to get data from db / other source
                 // use the id on args to return the book object
                 const { id } = args;
                 for (book of books) {
