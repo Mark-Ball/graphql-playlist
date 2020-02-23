@@ -35,7 +35,7 @@ const BookType = new GraphQLObjectType({
             type: AuthorType,
             resolve(parent, args) {
                 for (author of authors) {
-                    if (authorId === author.id) {
+                    if (parent.authorId === author.id) {
                         return author;
                     }
                 }
@@ -49,7 +49,7 @@ const AuthorType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
-        age: { type: GraphQLInt},
+        age: { type: GraphQLInt },
         books: {
             type: new GraphQLList(BookType),
             resolve(parent, args) {
@@ -62,11 +62,11 @@ const AuthorType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
+        // query for single book based on id
         book: {
             type: BookType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-                // use the id on args to return the book object
                 const { id } = args;
                 for (book of books) {
                     if (id === book.id) {
@@ -75,11 +75,11 @@ const RootQuery = new GraphQLObjectType({
                 }
             }
         },
+        // query for single author based on id
         author: {
             type: AuthorType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-                // find author based on id
                 const { id } = args;
                 for (author of authors) {
                     if (id === author.id) {
@@ -87,8 +87,20 @@ const RootQuery = new GraphQLObjectType({
                     }
                 }
             }
+        },
+        // query for all books
+        books: {
+            type: new GraphQLList(BookType),
+            resolve(parent, args) {
+                return books;
+            }
+        },
+        authors: {
+            type: new GraphQLList(AuthorType),
+            resolve(parent, args) {
+                return authors;
+            }
         }
-        // can we write a query for all books?
     }
 });
 
