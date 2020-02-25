@@ -12,21 +12,6 @@ const getBooksQuery = gql`
 `;
 
 class BookList extends Component {
-    displayBooks() {
-        let { data, loading } = this.props;
-        console.log(data);
-
-        if (loading) {
-            return <div>Loading...</div>
-        } else {
-            return data.books.map(book => {
-                return (
-                    <li>{book.name}</li>
-                )
-            })
-        }
-    }
-
     render() {
         // nested destructuring, equivalent to:
         // const { data } = this.props;
