@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
 
-import { getAuthorsQuery } from '../queries/queries';
+import { getAuthorsQuery, addBookMutation } from '../queries/queries';
 
 class AddBook extends Component {
     state = {
@@ -12,6 +12,14 @@ class AddBook extends Component {
 
     handleChange = event => {
         this.setState({ [event.target.name]: event.target.value });
+    };
+
+    handleSubmit = event => {
+        event.preventDefault();
+        const { bookName, bookGenre, bookAuthor } = this.state;
+        // create json for query variables
+        const requestVariables = JSON.stringify({ name: bookName, genre: bookGenre, authorId: bookAuthor });
+        console.log(requestVariables);
     };
 
     render() {
@@ -30,7 +38,7 @@ class AddBook extends Component {
                 ?
                 <div>Loading...</div>
                 :
-                <form id='add-book'>
+                <form id='add-book' onSubmit={this.handleSubmit}>
                     <div className='field'>
                         <label>Book name:</label>
                         <input 
@@ -58,9 +66,10 @@ class AddBook extends Component {
                         >
                             <option>Select author</option>
                             {authors.map(author => (
-                            <option key={author.id} value={author.id}>
-                                {author.name}
-                            </option>))}
+                                <option key={author.id} value={author.id}>
+                                    {author.name}
+                                </option>)
+                            )}
                         </select>
                     </div>
                     <input type='submit' value='+' />
