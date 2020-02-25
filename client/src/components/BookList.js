@@ -1,15 +1,7 @@
 import React, { Component } from 'react';
-import { gql } from 'apollo-boost';
 import { graphql } from 'react-apollo';
 
-const getBooksQuery = gql`
-    {
-        books {
-            name
-            id
-        }
-    }
-`;
+import { getBooksQuery } from '../queries/queries';
 
 class BookList extends Component {
     render() {
@@ -18,6 +10,9 @@ class BookList extends Component {
         // const { books, loading } = data;
         const { data: { books }, data: { loading } } = this.props;
 
+        // if data still loading, return a message to say we are loading
+        // there is an error if we do not do this because authors is undefined
+        // so we cannot map over it
         return (
             <div>
                 <ul id='book-list'>
