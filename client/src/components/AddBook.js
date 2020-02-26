@@ -18,9 +18,13 @@ class AddBook extends Component {
     handleSubmit = event => {
         event.preventDefault();
         const { bookName, bookGenre, bookAuthor } = this.state;
-        // create json for query variables
-        const requestVariables = JSON.stringify({ name: bookName, genre: bookGenre, authorId: bookAuthor });
-        console.log(requestVariables);
+        this.props.addBookMutation({
+            variables: {
+                name: bookName,
+                genre: bookGenre,
+                authorId: bookAuthor
+            }
+        });
     };
 
     render() {
