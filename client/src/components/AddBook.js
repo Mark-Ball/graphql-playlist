@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
+import { flowRight as compose } from 'lodash';
 
 import { getAuthorsQuery, addBookMutation } from '../queries/queries';
 
@@ -23,10 +24,11 @@ class AddBook extends Component {
     };
 
     render() {
+        // data on getAuthorsQuery inside props because of multiple gql queries
         // nested destructuring, equivalent to:
-        // const { data } = this.props;
-        // const { authors, loading } = data;
-        const { data: { authors }, data: { loading } } = this.props;
+        // const { getAuthorsQuery } = this.props;
+        // const { authors, loading } = getAuthorsQuery;
+        const { getAuthorsQuery: { authors }, getAuthorsQuery: { loading } } = this.props;
         const { bookName, bookGenre, bookAuthor } = this.state;
 
         // if data still loading, return a message to say we are loading
@@ -79,4 +81,7 @@ class AddBook extends Component {
     }
 }
 
-export default graphql(getAuthorsQuery)(AddBook);
+export default compose(
+    graphql(getAuthorsQuery, { name: 'getAuthorsQuery' }),
+    graphql(addBookMutation, { name: 'addBookMutation' })
+)(AddBook);
