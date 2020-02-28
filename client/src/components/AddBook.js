@@ -79,7 +79,7 @@ class AddBook extends Component {
                             )}
                         </select>
                     </div>
-                    <input type='submit' value='+' />
+                    <input id='button' type='submit' value='+' />
                 </form>}
             </>
         )
